@@ -40,7 +40,8 @@ class GeneticAlgorithm(object):
                  crossover_probability=0.8,
                  mutation_probability=0.2,
                  elitism=True,
-                 maximise_fitness=True):
+                 maximise_fitness=True,
+                 save_history=True):
         """Instantiate the Genetic Algorithm.
 
         :param seed_data: input data to the Genetic Algorithm
@@ -59,7 +60,8 @@ class GeneticAlgorithm(object):
         self.mutation_probability = mutation_probability
         self.elitism = elitism
         self.maximise_fitness = maximise_fitness
-
+        self.best_individual_history = []
+        self.save_history = save_history
         self.current_generation = []
 
         def create_individual(seed_data):
@@ -197,9 +199,13 @@ class GeneticAlgorithm(object):
     def run(self):
         """Run (solve) the Genetic Algorithm."""
         self.create_first_generation()
+        if self.save_history:
+            self.best_individual_history.append(self.best_individual())
 
         for _ in range(1, self.generations):
             self.create_next_generation()
+            if self.save_history:
+                self.best_individual_history.append(self.best_individual())
 
     def best_individual(self):
         """Return the individual with the best fitness in the current
